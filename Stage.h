@@ -13,5 +13,6 @@ public:
 	void Update() override;
 	void Draw() override;
 	
+	int GetMap(int x, int y);
 };
 

@@ -1,5 +1,7 @@
 #include "Enemy.h"
 #include "time.h"
+#include "Stage.h"
+#include "Library/ObjectManager.h"
 
 namespace
 {
@@ -59,12 +61,22 @@ void Enemy::Update()
 		default:
 			break;
 		}
+		//Point p = ((Stage*) FindGameObject<Stage>())->GetMap(newPos.x / CHA_SIZE, newPos.y / CHA_SIZE);
+		int mapValue = FindGameObject<Stage>()->GetMap(newPos.x / CHA_SIZE, newPos.y / CHA_SIZE);
+		Stage* stage = FindGameObject<Stage>();
 		//移動先がステージの外に出ないようにする
+
+		if (mapValue != 1) {
+			pos_ = newPos;
+		}
+
+		/*
 		if (!(newPos.x < 1 || newPos.x >(STAGE_WIDTH - 2) * ENEMY_DRAW_SIZE
 			|| newPos.y < 1 || newPos.y >(STAGE_HEIGHT - 2) * ENEMY_DRAW_SIZE))
 		{
 			pos_ = newPos;
 		}
+		*/
 		prog_timer = 0.5f + prog_timer;
 	}
 
