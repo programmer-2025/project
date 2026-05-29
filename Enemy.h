@@ -7,9 +7,9 @@ class Enemy :
     public GameObject
 {
 	int hImage_;//‰æ‘œID
+public:
 	Point pos_;//ˆÊ’u
 	DIR dir_;//ˆÚ“®•ûŒü
-public:
 	Enemy();
 	~Enemy();
 	void Update() override;

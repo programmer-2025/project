@@ -2,15 +2,22 @@
 #include "time.h"
 #include "Stage.h"
 #include "Library/ObjectManager.h"
+#include "ImGui/imgui.h"
 
 namespace
 {
+	const int OUT_LINE_POINT = 1;
 	const int ENEMY_SIZE = 48; //敵のサイズ 32*32
-	const Point ENEMY_START_POS = { 20 * ENEMY_SIZE, 10 * ENEMY_SIZE }; //敵の初期位置
-	const DIR INIT_ENEMY_DIR = { LEFT };
+	const Point ENEMY_START_POS = { OUT_LINE_POINT * CHA_SIZE, OUT_LINE_POINT * CHA_SIZE }; //敵の初期位置
+	const DIR INIT_ENEMY_DIR = { RIGHT };
 	const int ENEMY_DRAW_SIZE = 32; //敵の描画サイズ
 	const int animFrame[4]{ 0, 1, 2, 1 };
 	const float ANIM_INTERVAL = 0.2f;
+
+	const int maxX = ((STAGE_WIDTH * CHA_SIZE) / STAGE_WIDTH) - 1;
+	const int maxY = ((STAGE_HEIGHT * CHA_SIZE) / STAGE_HEIGHT) - 1;
+	const int maxRightX = (maxX - OUT_LINE_POINT);
+	const int maxRightY = (maxY - OUT_LINE_POINT);
 }
 
 
@@ -37,7 +44,26 @@ void Enemy::Update()
 	prog_timer = prog_timer - dt;
 	if (dir_timer < 0.0f)
 	{
-		dir_ = (DIR)(GetRand(3));
+		// dir_ = (DIR)(GetRand(3));		
+		int x = pos_.x / STAGE_WIDTH;
+		int y = pos_.y / STAGE_HEIGHT;
+
+		if (y == OUT_LINE_POINT) {
+			if (x == maxRightX) {
+				dir_ = DIR::DOWN;
+			}
+			else {
+				dir_ = DIR::RIGHT;
+			}
+		}
+		else if (y == maxRightY) {
+			if (x == maxRightX) {
+				dir_ = DIR::LEFT;
+			}
+			else {
+				dir_ = DIR::UP;
+			}
+		}
 		dir_timer = 3.0f + dir_timer;
 	}
 
@@ -103,4 +129,5 @@ void Enemy::Draw()
 		animTimer = ANIM_INTERVAL + animTimer;
 	}
 	animTimer = animTimer - Time::DeltaTime();
+
 }
